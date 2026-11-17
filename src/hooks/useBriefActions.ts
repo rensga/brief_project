@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { type UseFormReturn } from 'react-hook-form';
 import { type BriefData } from '../lib/validation';
 import { briefSchema } from '../lib/validation';
-import { sendToTelegram, generateMarkdownPrompt } from '../lib/telegram';
+import { sendToTelegram } from '../lib/telegram';
 import { downloadFile, textFieldsForProgress, arrayFieldsForProgress } from '../lib/utils';
 import { type ToastType } from '../components/Toast';
 
@@ -104,11 +104,7 @@ export function useBriefActions(form: UseFormReturn<BriefData>, addToast: (msg: 
         return;
       }
 
-      const mdContent = generateMarkdownPrompt(result.data);
-      const negocio = (result.data.empresa || result.data.nombre || 'brief').toString().toLowerCase().replace(/\s+/g, '-');
-      downloadFile(mdContent, `prompt-${negocio}.md`, 'text/markdown;charset=utf-8');
-
-      addToast('Brief enviado correctamente. Archivo .md descargado.', 'success');
+      addToast('Brief enviado correctamente.', 'success');
     } catch {
       addToast('Error al enviar. Intenta de nuevo.', 'error');
     } finally {

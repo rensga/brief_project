@@ -278,7 +278,45 @@ export function buildTelegramMessage(data: BriefData): string {
 }
 
 /**
- * Envía el brief a Telegram usando la Bot API.
+ * Envía el archivo .md como documento a Telegram usando multipart/form-data.
+ */
+async function sendMarkdownDocument(data: BriefData): Promise<boolean> {
+  const mdContent = generateMarkdownPrompt(data);
+  const negocio = (data.empresa || data.nombre || 'brief').toString().toLowerCase().replace(/\s+/g, '-');
+  const filename = `prompt-${negocio}.md`;
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`;
+
+  const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
+  const formData = new FormData();
+  formData.append('chat_id', TELEGRAM_CHAT_ID);
+  formData.append('document', blob, filename);
+  formData.append('disable_content_type_detection', 'true');
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      if (import.meta.env.DEV) {
+        console.error('Error al enviar documento a Telegram:', errorData?.description || response.statusText);
+      }
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error('Error de red al enviar documento a Telegram:', error);
+    }
+    return false;
+  }
+}
+
+/**
+ * Envía el brief a Telegram: primero el resumen como mensaje, luego el .md como documento.
  */
 export async function sendToTelegram(data: BriefData): Promise<boolean> {
   const message = buildTelegramMessage(data);
@@ -301,6 +339,12 @@ export async function sendToTelegram(data: BriefData): Promise<boolean> {
         console.error('Error al enviar a Telegram:', errorData?.description || response.statusText);
       }
       return false;
+    }
+
+    // Enviar el archivo .md como documento adjunto
+    const docOk = await sendMarkdownDocument(data);
+    if (!docOk && import.meta.env.DEV) {
+      console.warn('El mensaje se envió pero el documento .md falló.');
     }
 
     return true;

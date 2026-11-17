@@ -1,17 +1,5 @@
 import { type BriefData } from './validation';
 
-// Configuración del bot de Telegram
-// Para obtener un token:
-// 1. Abre Telegram y busca @BotFather
-// 2. Envía /newbot y sigue las instrucciones
-// 3. Copia el token que te da BotFather
-// 4. Para obtener el chat_id:
-//    - Envía un mensaje a tu bot
-//    - Visita: https://api.telegram.org/bot<TU_TOKEN>/getUpdates
-//    - Busca "chat": {"id": 123456789} en la respuesta
-const TELEGRAM_BOT_TOKEN = '9276574208:AAEFjumObOr7SRhXpHCEd5lTk4OgCoysdto';
-const TELEGRAM_CHAT_ID = '5948911209';
-
 function v(value?: string) {
   return value && value.trim() ? value.trim() : '';
 }
@@ -278,79 +266,31 @@ export function buildTelegramMessage(data: BriefData): string {
 }
 
 /**
- * Envía el archivo .md como documento a Telegram usando multipart/form-data.
- */
-async function sendMarkdownDocument(data: BriefData): Promise<boolean> {
-  const mdContent = generateMarkdownPrompt(data);
-  const negocio = (data.empresa || data.nombre || 'brief').toString().toLowerCase().replace(/\s+/g, '-');
-  const filename = `prompt-${negocio}.md`;
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`;
-
-  const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
-  const formData = new FormData();
-  formData.append('chat_id', TELEGRAM_CHAT_ID);
-  formData.append('document', blob, filename);
-  formData.append('disable_content_type_detection', 'true');
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      if (import.meta.env.DEV) {
-        console.error('Error al enviar documento a Telegram:', errorData?.description || response.statusText);
-      }
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      console.error('Error de red al enviar documento a Telegram:', error);
-    }
-    return false;
-  }
-}
-
-/**
- * Envía el brief a Telegram: primero el resumen como mensaje, luego el .md como documento.
+ * Envía el brief a la Netlify Function que se encarga de enviar el mensaje y el documento a Telegram.
+ * Esto evita problemas de CORS y protege el token del bot.
  */
 export async function sendToTelegram(data: BriefData): Promise<boolean> {
-  const message = buildTelegramMessage(data);
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  const url = '/.netlify/functions/send-brief';
 
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'Markdown',
-      }),
+      body: JSON.stringify({ data }),
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
       if (import.meta.env.DEV) {
-        console.error('Error al enviar a Telegram:', errorData?.description || response.statusText);
+        console.error('Error al enviar brief:', errorData?.error || response.statusText);
       }
       return false;
-    }
-
-    // Enviar el archivo .md como documento adjunto
-    const docOk = await sendMarkdownDocument(data);
-    if (!docOk && import.meta.env.DEV) {
-      console.warn('El mensaje se envió pero el documento .md falló.');
     }
 
     return true;
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error('Error de red al enviar a Telegram:', error);
+      console.error('Error de red al enviar brief:', error);
     }
     return false;
   }

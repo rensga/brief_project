@@ -1,6 +1,6 @@
 import { Button } from './Button';
 import { useThemeStore } from '../stores/themeStore';
-import { Sun, Moon, ArrowLeft, Check, Star } from 'lucide-react';
+import { Sun, Moon, ArrowLeft, Check } from 'lucide-react';
 
 interface PriceTier {
   name: string;
@@ -17,7 +17,7 @@ interface PriceTier {
 const priceTiers: PriceTier[] = [
   {
     name: 'Landing Page',
-    icon: '🚀',
+    icon: '',
     price: '$150 - $400',
     priceFrom: true,
     description: 'Una página única y atractiva para presentar tu negocio, producto o servicio. Ideal para captar leads o promocionar algo específico.',
@@ -39,7 +39,7 @@ const priceTiers: PriceTier[] = [
   },
   {
     name: 'Sitio Corporativo',
-    icon: '🏢',
+    icon: '',
     price: '$500 - $1,500',
     priceFrom: true,
     description: 'Un sitio web completo para tu empresa con múltiples secciones, blog y todo lo necesario para proyectar profesionalismo.',
@@ -63,7 +63,7 @@ const priceTiers: PriceTier[] = [
   },
   {
     name: 'Tienda Online',
-    icon: '🛒',
+    icon: '',
     price: '$1,000 - $3,000',
     priceFrom: true,
     description: 'Una tienda completa para vender tus productos online con carrito de compras, pasarela de pagos y gestión de inventario.',
@@ -86,7 +86,7 @@ const priceTiers: PriceTier[] = [
   },
   {
     name: 'Sistema / App Web',
-    icon: '⚙️',
+    icon: '',
     price: '$2,000 - $5,000+',
     priceFrom: true,
     description: 'Aplicaciones web personalizadas con funcionalidades complejas: reservas, gestión, dashboards, sistemas de usuarios, etc.',
@@ -143,18 +143,16 @@ export function Prices() {
           >
             {tier.popular && (
               <div className="pricing-badge">
-                <Star size={14} />
                 Más popular
               </div>
             )}
-            <div className="pricing-icon">{tier.icon}</div>
             <h3>{tier.name}</h3>
             <div className="pricing-amount">
               <span className="pricing-currency">$</span>
               <span className="pricing-value">{tier.price.replace('$', '').replace('+', '+')}</span>
             </div>
             <p className="pricing-description">{tier.description}</p>
-            <div className="pricing-delivery">⏱️ Entrega: {tier.delivery}</div>
+            <div className="pricing-delivery">Entrega: {tier.delivery}</div>
             <ul className="pricing-features">
               {tier.features.map((feature, i) => (
                 <li key={i}>

@@ -8,7 +8,7 @@ import { funcionesOptions, adminOptions } from '../../config/formOptions';
 export function FunctionalitySection({ register, errors }: { register: UseFormRegister<BriefData>; errors: FieldErrors<BriefData> }) {
   return (
     <section className="card">
-      <h2>5 · Funcionalidad y sistemas</h2>
+      <h2>Funcionalidad y sistemas</h2>
       <p className="hint">Las "cosas que hacen cosas". Marcá lo que necesites.</p>
       <CheckboxGroup
         groupLabel="Funciones que necesitás"

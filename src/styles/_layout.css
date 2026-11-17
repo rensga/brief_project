@@ -13,11 +13,12 @@
 /* ---- Header ---- */
 
 header.top {
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-  color: #fff;
-  padding: 28px 24px;
+  background: var(--bg-secondary);
+  color: var(--ink);
+  padding: 24px;
   border-radius: var(--radius);
-  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  margin-bottom: 24px;
 }
 
 .header-inner {
@@ -28,38 +29,33 @@ header.top {
 }
 
 header.top h1 {
-  margin: 0 0 6px;
-  font-size: 1.6rem;
-  font-weight: 700;
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 header.top p {
   margin: 0;
-  opacity: 0.9;
-  font-size: 0.95rem;
+  color: var(--ink-secondary);
+  font-size: 0.92rem;
 }
 
 /* ---- Cards ---- */
 
 section.card {
-  background: var(--card-bg, #fff);
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 22px 22px 8px;
-  margin-bottom: 18px;
-}
-
-[data-theme="dark"] section.card {
-  background: var(--card);
+  padding: 24px 24px 16px;
+  margin-bottom: 16px;
 }
 
 section.card h2 {
   margin: 0 0 4px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--brand);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
 }
 
 .hint {

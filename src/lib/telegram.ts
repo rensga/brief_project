@@ -266,10 +266,85 @@ export function buildTelegramMessage(data: BriefData): string {
 }
 
 /**
- * Envía el brief a la Netlify Function que se encarga de enviar el mensaje y el documento a Telegram.
- * Esto evita problemas de CORS y protege el token del bot.
+ * Envía el brief a Telegram.
+ * - En desarrollo local: llama directamente a la API de Telegram usando las variables VITE_TELEGRAM_*.
+ * - En producción: usa la Netlify Function que protege el token del bot.
  */
 export async function sendToTelegram(data: BriefData): Promise<boolean> {
+  // En desarrollo, usar API directa de Telegram
+  if (import.meta.env.DEV) {
+    return sendToTelegramDirect(data);
+  }
+
+  // En producción, usar Netlify Function
+  return sendToTelegramViaFunction(data);
+}
+
+/**
+ * Envía directamente a la API de Telegram (solo desarrollo local).
+ */
+async function sendToTelegramDirect(data: BriefData): Promise<boolean> {
+  const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+  const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+  if (!botToken || !chatId) {
+    console.warn('Credenciales de Telegram no configuradas en .env.local');
+    return false;
+  }
+
+  try {
+    // 1. Enviar mensaje de resumen
+    const message = buildTelegramMessage(data);
+    const messageUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    const messageResponse = await fetch(messageUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+        parse_mode: 'Markdown',
+      }),
+    });
+
+    if (!messageResponse.ok) {
+      const errorData = await messageResponse.json().catch(() => null);
+      console.error('Error al enviar mensaje a Telegram:', errorData?.description || messageResponse.statusText);
+      return false;
+    }
+
+    // 2. Enviar documento .md
+    const mdContent = generateMarkdownPrompt(data);
+    const negocio = (data.empresa || data.nombre || 'brief').toString().toLowerCase().replace(/\s+/g, '-');
+    const filename = `prompt-${negocio}.md`;
+    const docUrl = `https://api.telegram.org/bot${botToken}/sendDocument`;
+
+    const formData = new FormData();
+    formData.append('chat_id', chatId);
+    formData.append('document', new Blob([mdContent], { type: 'text/markdown;charset=utf-8' }), filename);
+
+    const docResponse = await fetch(docUrl, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!docResponse.ok) {
+      const errorData = await docResponse.json().catch(() => null);
+      console.error('Error al enviar documento a Telegram:', errorData?.description || docResponse.statusText);
+      // No fallar completamente si el mensaje ya se envió
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error al enviar a Telegram:', error);
+    return false;
+  }
+}
+
+/**
+ * Envía a través de la Netlify Function (producción).
+ */
+async function sendToTelegramViaFunction(data: BriefData): Promise<boolean> {
   const url = '/.netlify/functions/send-brief';
 
   try {
@@ -281,17 +356,13 @@ export async function sendToTelegram(data: BriefData): Promise<boolean> {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      if (import.meta.env.DEV) {
-        console.error('Error al enviar brief:', errorData?.error || response.statusText);
-      }
+      console.error('Error al enviar brief:', errorData?.error || response.statusText);
       return false;
     }
 
     return true;
   } catch (error) {
-    if (import.meta.env.DEV) {
-      console.error('Error de red al enviar brief:', error);
-    }
+    console.error('Error de red al enviar brief:', error);
     return false;
   }
 }

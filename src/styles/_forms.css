@@ -10,11 +10,14 @@
 }
 
 .field > label,
+.field-label,
 .group-label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  font-size: 0.88rem;
+  margin-bottom: 8px;
 }
 
 .group-label {
@@ -24,6 +27,90 @@
 .field .required {
   color: var(--error);
   margin-left: 2px;
+}
+
+/* ---- Tooltip hint ---- */
+
+.field-hint-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--card-border);
+  color: var(--muted);
+  cursor: help;
+  transition: color var(--transition), background var(--transition);
+  flex-shrink: 0;
+}
+
+.field-hint-tooltip:hover,
+.field-hint-tooltip:focus {
+  background: var(--line);
+  color: var(--ink-secondary);
+}
+
+.tooltip-content {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-secondary);
+  color: var(--ink);
+  padding: 8px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: normal;
+  width: max-content;
+  max-width: 240px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--card-border);
+  z-index: 50;
+  pointer-events: none;
+  animation: tooltip-in 0.15s ease-out;
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--bg-secondary);
+}
+
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ---- Section completion indicator ---- */
+
+section.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: transparent;
+  transition: background var(--transition);
+}
+
+section.card.completed::before {
+  background: var(--accent);
 }
 
 /* ---- Text Inputs, Selects, Textareas ---- */
@@ -40,11 +127,12 @@ textarea {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font: inherit;
-  background: #fff;
+  font-size: 0.92rem;
+  background: var(--bg);
   color: var(--ink);
-  transition: all var(--transition);
+  transition: border-color var(--transition);
   outline: none;
 }
 
@@ -57,7 +145,7 @@ textarea {
 [data-theme="dark"] input[type="password"],
 [data-theme="dark"] select,
 [data-theme="dark"] textarea {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg);
   color: var(--ink);
 }
 
@@ -83,8 +171,7 @@ input[type="date"]:focus,
 input[type="password"]:focus,
 select:focus,
 textarea:focus {
-  outline: 2px solid var(--brand-soft);
-  border-color: var(--brand);
+  border-color: var(--accent);
 }
 
 /* Invalid / error state */
@@ -92,7 +179,6 @@ input.invalid,
 textarea.invalid,
 select.invalid {
   border-color: var(--error);
-  box-shadow: 0 0 0 3px var(--error-soft);
 }
 
 /* ---- Textarea ---- */
@@ -162,16 +248,16 @@ select {
 
 input[type="color"] {
   width: 100%;
-  height: 42px;
+  height: 40px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 4px;
-  background: #fff;
+  background: var(--bg);
   cursor: pointer;
 }
 
 [data-theme="dark"] input[type="color"] {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg);
 }
 
 /* ---- Checkboxes & Radios (simple) ---- */
@@ -199,7 +285,7 @@ input[type="color"] {
 .checks input[type="checkbox"],
 .checks input[type="radio"] {
   margin-top: 4px;
-  accent-color: var(--brand);
+  accent-color: var(--accent);
 }
 
 /* ---- Note ---- */

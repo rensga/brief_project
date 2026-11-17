@@ -7,7 +7,7 @@ import { tieneOptions, extrasOptions } from '../../config/formOptions';
 export function TechnicalSection({ register, errors }: { register: UseFormRegister<BriefData>; errors: FieldErrors<BriefData> }) {
   return (
     <section className="card">
-      <h2>7 · Técnico y extras</h2>
+      <h2>Técnico y extras</h2>
       <CheckboxGroup
         groupLabel="¿Qué tenés ya?"
         name="tiene"

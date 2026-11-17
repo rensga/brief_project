@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { type UseFormReturn } from 'react-hook-form';
 import { type BriefData } from '../lib/validation';
 import { briefSchema } from '../lib/validation';
@@ -7,6 +7,10 @@ import { downloadFile, textFieldsForProgress, arrayFieldsForProgress } from '../
 import { type ToastType } from '../components/Toast';
 
 const STORAGE_KEY = 'brief-web-v1';
+const SAVE_DEBOUNCE_MS = 800;
+const SAVED_DISPLAY_MS = 2000;
+
+type SaveState = 'idle' | 'saving' | 'saved';
 
 const defaultArrayValues = {
   marca: [] as string[],
@@ -26,6 +30,9 @@ const defaultColorValues = {
 export function useBriefActions(form: UseFormReturn<BriefData>, addToast: (msg: string, type: ToastType) => void) {
   const [sending, setSending] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [saveState, setSaveState] = useState<SaveState>('idle');
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { watch, setValue, reset, getValues } = form;
   const watched = watch();
@@ -45,13 +52,33 @@ export function useBriefActions(form: UseFormReturn<BriefData>, addToast: (msg: 
     }
   }, [setValue]);
 
-  // Guardar en localStorage al cambiar
+  // Guardar en localStorage al cambiar (con debounce y estado visual)
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(watched));
-    } catch (err) {
-      if (import.meta.env.DEV) console.error('Error al guardar brief en localStorage:', err);
-    }
+    // Limpiar timers anteriores
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+
+    // Mostrar "Guardando..."
+    setSaveState('saving');
+
+    saveTimerRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(watched));
+        // Mostrar "Guardado" después de guardar
+        setSaveState('saved');
+        savedTimerRef.current = setTimeout(() => {
+          setSaveState('idle');
+        }, SAVED_DISPLAY_MS);
+      } catch (err) {
+        if (import.meta.env.DEV) console.error('Error al guardar brief en localStorage:', err);
+        setSaveState('idle');
+      }
+    }, SAVE_DEBOUNCE_MS);
+
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    };
   }, [watched]);
 
   // Calcular progreso
@@ -87,30 +114,44 @@ export function useBriefActions(form: UseFormReturn<BriefData>, addToast: (msg: 
 
   const onPrint = () => window.print();
 
+  // Scroll al primer campo con error
+  const scrollToFirstError = useCallback(() => {
+    const firstErrorEl = document.querySelector('.field .invalid');
+    if (firstErrorEl) {
+      firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Focus en el input
+      const input = firstErrorEl.querySelector('input, textarea, select');
+      if (input) {
+        (input as HTMLInputElement).focus();
+      }
+    }
+  }, []);
+
   const onSend = async () => {
     const data = getValues();
     const result = await briefSchema.safeParseAsync(data);
     if (!result.success) {
       addToast('Completa los campos obligatorios antes de enviar.', 'error');
+      // Scroll al primer campo con error
+      setTimeout(() => scrollToFirstError(), 100);
       return;
     }
 
     setSending(true);
     try {
       const ok = await sendToTelegram(result.data);
-      if (!ok) {
-        addToast('Error al enviar. Intenta de nuevo.', 'error');
-        setSending(false);
-        return;
-      }
 
-      addToast('Brief enviado correctamente.', 'success');
+      if (ok) {
+        addToast('Brief enviado correctamente a Telegram.', 'success');
+      } else {
+        addToast('Error al enviar el brief. Intenta de nuevo.', 'error');
+      }
     } catch {
-      addToast('Error al enviar. Intenta de nuevo.', 'error');
+      addToast('Error al enviar el brief. Intenta de nuevo.', 'error');
     } finally {
       setSending(false);
     }
   };
 
-  return { sending, progress, onClear, onExport, onPrint, onSend };
+  return { sending, progress, saveState, onClear, onExport, onPrint, onSend, scrollToFirstError };
 }

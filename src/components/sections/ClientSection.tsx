@@ -5,7 +5,7 @@ import { Input } from '../Input';
 export function ClientSection({ register, errors }: { register: UseFormRegister<BriefData>; errors: FieldErrors<BriefData> }) {
   return (
     <section className="card">
-      <h2>1 · Datos del cliente</h2>
+      <h2>Datos del cliente</h2>
       <p className="hint">Para saber con quién hablamos.</p>
       <div className="row">
         <Input label="Nombre y apellido *" name="nombre" register={register} errors={errors} required />

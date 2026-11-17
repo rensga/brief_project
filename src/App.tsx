@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Sun, Moon } from 'lucide-react';
@@ -6,11 +6,14 @@ import { Sun, Moon } from 'lucide-react';
 import { useThemeStore } from './stores/themeStore';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Button } from './components/Button';
-import { ProgressBar } from './components/ProgressBar';
 import { ToastContainer, useToast } from './components/Toast';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { FloatingActions } from './components/FloatingActions';
 import { Prices } from './components/Prices';
+import { Stepper, STEPS } from './components/Stepper';
+import { BriefPreview } from './components/BriefPreview';
+import { ModalOverlay } from './components/ModalOverlay';
+import { SaveStatus } from './components/SaveStatus';
 import { briefSchema, type BriefData } from './lib/validation';
 import { useBriefActions } from './hooks/useBriefActions';
 
@@ -23,10 +26,14 @@ import { DatabaseSection } from './components/sections/DatabaseSection';
 import { TechnicalSection } from './components/sections/TechnicalSection';
 import { ObservationsSection } from './components/sections/ObservationsSection';
 
+const FORM_STEP_COUNT = STEPS.filter((s) => s.id !== 'preview').length;
+
 function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
   const { theme, toggleTheme } = useThemeStore();
   const { toasts, addToast, removeToast } = useToast();
   const [showClearDialog, setShowClearDialog] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const form = useForm<BriefData>({
     resolver: zodResolver(briefSchema),
@@ -43,13 +50,72 @@ function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
     },
   });
 
-  const { register, formState: { errors } } = form;
-  const { sending, progress, onClear, onExport, onPrint, onSend } = useBriefActions(form, addToast);
+  const { register, formState: { errors }, getValues } = form;
+  const { sending, progress, saveState, onClear, onExport, onPrint, onSend } = useBriefActions(form, addToast);
 
   const handleClear = () => {
     setShowClearDialog(false);
     onClear(() => {});
   };
+
+  const handleNext = () => {
+    if (currentStep < FORM_STEP_COUNT) {
+      setCurrentStep((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleGoToPreview = () => {
+    setShowPreview(true);
+  };
+
+  const handleClosePreview = () => {
+    setShowPreview(false);
+  };
+
+  const handleEditStep = (stepIndex: number) => {
+    setShowPreview(false);
+    setTimeout(() => {
+      setCurrentStep(stepIndex);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 200);
+  };
+
+  const sectionMap = useMemo(() => {
+    return (
+      sectionIndex: number,
+      register: any,
+      errors: any
+    ) => {
+      switch (sectionIndex) {
+        case 0:
+          return <ClientSection register={register} errors={errors} />;
+        case 1:
+          return <ProjectSection register={register} errors={errors} />;
+        case 2:
+          return <DesignSection register={register} errors={errors} />;
+        case 3:
+          return <ContentSection register={register} errors={errors} />;
+        case 4:
+          return <FunctionalitySection register={register} errors={errors} />;
+        case 5:
+          return <DatabaseSection register={register} errors={errors} />;
+        case 6:
+          return <TechnicalSection register={register} errors={errors} />;
+        case 7:
+          return <ObservationsSection register={register} errors={errors} />;
+        default:
+          return null;
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -84,17 +150,29 @@ function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
           </div>
         </header>
 
-        <form id="brief" noValidate>
-          <ClientSection register={register} errors={errors} />
-          <ProjectSection register={register} errors={errors} />
-          <DesignSection register={register} errors={errors} />
-          <ContentSection register={register} errors={errors} />
-          <FunctionalitySection register={register} errors={errors} />
-          <DatabaseSection register={register} errors={errors} />
-          <TechnicalSection register={register} errors={errors} />
-          <ObservationsSection register={register} errors={errors} />
-          <ProgressBar percent={progress} />
+        {/* Stepper navigation */}
+        <Stepper
+          currentStep={currentStep}
+          totalSteps={FORM_STEP_COUNT}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onGoToPreview={handleGoToPreview}
+          onSend={onSend}
+          sending={sending}
+          progress={progress}
+        />
+
+        {/* Save status indicator */}
+        <SaveStatus state={saveState} />
+
+        <form id="brief" noValidate className="brief-form">
+          {sectionMap(currentStep, register, errors)}
         </form>
+
+        {/* Preview modal */}
+        <ModalOverlay open={showPreview} onClose={handleClosePreview}>
+          <BriefPreview data={getValues()} onEditStep={handleEditStep} />
+        </ModalOverlay>
       </div>
 
       <FloatingActions

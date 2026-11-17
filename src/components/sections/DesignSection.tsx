@@ -8,7 +8,7 @@ import { marcaOptions, estiloOptions, modoOptions } from '../../config/formOptio
 export function DesignSection({ register, errors }: { register: UseFormRegister<BriefData>; errors: FieldErrors<BriefData> }) {
   return (
     <section className="card">
-      <h2>3 · Diseño e identidad visual</h2>
+      <h2>Diseño e identidad visual</h2>
       <p className="hint">Colores, estilo y marca.</p>
       <CheckboxGroup
         groupLabel="¿Ya tenés identidad de marca?"

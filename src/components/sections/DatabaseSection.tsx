@@ -8,7 +8,7 @@ import { dbNecesitaOptions, dbSensibleOptions } from '../../config/formOptions';
 export function DatabaseSection({ register, errors }: { register: UseFormRegister<BriefData>; errors: FieldErrors<BriefData> }) {
   return (
     <section className="card">
-      <h2>6 · Base de datos</h2>
+      <h2>Base de datos</h2>
       <p className="hint">Solo si necesitás guardar información.</p>
       <SelectField
         label="¿Necesitás guardar datos?"

@@ -8,7 +8,7 @@ import { seccionesOptions, contenidoProveedorOptions } from '../../config/formOp
 export function ContentSection({ register, errors }: { register: UseFormRegister<BriefData>; errors: FieldErrors<BriefData> }) {
   return (
     <section className="card">
-      <h2>4 · Contenido</h2>
+      <h2>Contenido</h2>
       <p className="hint">Qué se muestra y quién lo prepara.</p>
       <CheckboxGroup
         groupLabel="Secciones que necesitás"

@@ -2,6 +2,8 @@
    Brief Form — Main Styles Entry Point
    ============================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap');
+
 @import './styles/_base.css';
 @import './styles/_layout.css';
 @import './styles/_forms.css';

@@ -8,7 +8,7 @@ import { tipoSitioOptions } from '../../config/formOptions';
 export function ProjectSection({ register, errors }: { register: UseFormRegister<BriefData>; errors: FieldErrors<BriefData> }) {
   return (
     <section className="card">
-      <h2>2 · Sobre el proyecto</h2>
+      <h2>Sobre el proyecto</h2>
       <p className="hint">El "qué" y el "para qué".</p>
       <RadioGroup
         groupLabel="¿Qué tipo de sitio necesitás? *"

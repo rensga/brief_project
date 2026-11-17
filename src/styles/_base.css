@@ -2,49 +2,58 @@
    BASE — Variables, Reset, Body, Typography
    ============================================ */
 
+/*
+ Direction
+ - Product: Formulario de brief para diseñadores web freelance.
+ - Character: Calm, exact, a little warm.
+ - World: Paper, ink, desk light — a workspace tool.
+ - Moments: The color pickers (real swatches) and the progress bar.
+ - Signature: A thin left border on each section that fills as you complete it.
+*/
+
 :root {
-  --bg: #0a0a0f;
-  --bg-secondary: #12121a;
-  --card: rgba(255, 255, 255, 0.03);
-  --card-hover: rgba(255, 255, 255, 0.06);
-  --card-border: rgba(255, 255, 255, 0.06);
-  --ink: #e4e4e7;
-  --ink-secondary: #a1a1aa;
-  --muted: #71717a;
-  --line: rgba(255, 255, 255, 0.08);
-  --brand: #6366f1;
-  --brand-soft: rgba(99, 102, 241, 0.12);
-  --brand-glow: rgba(99, 102, 241, 0.25);
-  --brand-gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
-  --success: #22c55e;
-  --success-soft: rgba(34, 197, 94, 0.12);
-  --error: #ef4444;
-  --error-soft: rgba(239, 68, 68, 0.12);
-  --radius: 16px;
-  --radius-sm: 10px;
+  --bg: #141312;
+  --bg-secondary: #1c1b19;
+  --card: #1c1b19;
+  --card-hover: #262421;
+  --card-border: rgba(239, 233, 222, 0.08);
+  --ink: #efe9de;
+  --ink-secondary: #aaa398;
+  --muted: #8a847a;
+  --line: rgba(239, 233, 222, 0.08);
+  --accent: #d4a053;
+  --accent-soft: rgba(212, 160, 83, 0.12);
+  --success: #4cc38a;
+  --success-soft: rgba(76, 195, 138, 0.12);
+  --error: #e5484d;
+  --error-soft: rgba(229, 72, 77, 0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
   --radius-xs: 6px;
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --transition: 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+  --font: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 [data-theme="light"] {
-  --bg: #f8f9fc;
-  --bg-secondary: #eef0f6;
-  --card: rgba(255, 255, 255, 0.7);
-  --card-hover: rgba(255, 255, 255, 0.9);
-  --card-border: rgba(0, 0, 0, 0.06);
-  --ink: #18181b;
-  --ink-secondary: #52525b;
-  --muted: #a1a1aa;
-  --line: rgba(0, 0, 0, 0.08);
-  --brand: #4f46e5;
-  --brand-soft: rgba(79, 70, 229, 0.08);
-  --brand-glow: rgba(79, 70, 229, 0.15);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --bg: #f7f4ee;
+  --bg-secondary: #efe9df;
+  --card: #fdfbf7;
+  --card-hover: #ffffff;
+  --card-border: rgba(31, 27, 22, 0.08);
+  --ink: #1f1b16;
+  --ink-secondary: #5e554a;
+  --muted: #7b7266;
+  --line: rgba(31, 27, 22, 0.08);
+  --accent: #b8862e;
+  --accent-soft: rgba(184, 134, 46, 0.1);
+  --success: #16a34a;
+  --success-soft: rgba(22, 163, 74, 0.1);
+  --error: #dc2626;
+  --error-soft: rgba(220, 38, 38, 0.1);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 *,
@@ -64,15 +73,15 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 16px;
+  font-family: var(--font);
+  font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background var(--transition), color var(--transition);
   min-height: 100vh;
   overflow-x: hidden;
-  padding: 24px 16px 80px;
+  padding: 32px 16px 80px;
 }
 
 #root {
@@ -82,8 +91,8 @@ body {
 
 /* Selection color */
 ::selection {
-  background: var(--brand-soft);
-  color: var(--brand);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 /* Scrollbar styling */

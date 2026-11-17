@@ -1,0 +1,9 @@
+/* ============================================
+   Brief Form — Main Styles Entry Point
+   ============================================ */
+
+@import './styles/_base.css';
+@import './styles/_layout.css';
+@import './styles/_forms.css';
+@import './styles/_components.css';
+@import './styles/_responsive.css';

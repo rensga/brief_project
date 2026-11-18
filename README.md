@@ -44,14 +44,24 @@ pnpm install
 pnpm dev
 ```
 
-## Deploy en Netlify
+## Deploy en Vercel
 
 ```bash
 pnpm build
-netlify deploy --prod
+vercel --prod
 ```
 
-O arrastra la carpeta `dist` a [app.netlify.com/drop](https://app.netlify.com/drop).
+O conectá tu repositorio de GitHub a [vercel.com](https://vercel.com) para deploy automático.
+
+## Variables de entorno
+
+Antes de desplegar, copiá `.env.example` a `.env.local` y completá los valores:
+
+```bash
+cp .env.example .env.local
+```
+
+En Vercel, agregá las variables de entorno desde el panel de configuración del proyecto.
 
 ## Navegadores soportados
 

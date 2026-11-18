@@ -2,7 +2,9 @@
    COMPONENTS — Buttons, Progress, Toasts
    ============================================ */
 
-/* ---- Buttons ---- */
+/* ============================================
+   BUTTONS
+   ============================================ */
 
 .btn {
   font: inherit;
@@ -18,13 +20,11 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background var(--transition), border-color var(--transition);
+  transition: background var(--transition), border-color var(--transition), opacity var(--transition);
   white-space: nowrap;
 }
 
-.btn:hover {
-  background: var(--card-hover);
-}
+.btn:hover { background: var(--card-hover); }
 
 .btn:disabled,
 .btn.loading {
@@ -32,29 +32,22 @@
   cursor: not-allowed;
 }
 
-/* Primary button */
 .btn-primary {
   background: var(--ink);
   color: var(--bg);
   border-color: var(--ink);
 }
+.btn-primary:hover { opacity: 0.85; }
 
-.btn-primary:hover {
-  opacity: 0.85;
-}
-
-/* Danger button */
 .btn-danger {
   color: var(--error);
   border-color: rgba(239, 68, 68, 0.25);
 }
-
 .btn-danger:hover {
   background: var(--error-soft);
   border-color: var(--error);
 }
 
-/* Ghost button */
 .btn-ghost {
   background: transparent;
   border: none;
@@ -62,13 +55,11 @@
   padding: 8px;
   border-radius: var(--radius-xs);
 }
-
 .btn-ghost:hover {
   background: var(--card-border);
   color: var(--ink);
 }
 
-/* Button icon */
 .btn-icon {
   display: flex;
   align-items: center;
@@ -76,16 +67,23 @@
   flex-shrink: 0;
 }
 
-/* Spinner */
-@keyframes spin {
-  to { transform: rotate(360deg); }
+/* Outline button */
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.btn-outline:hover {
+  background: var(--card-hover);
+  border-color: var(--ink-secondary);
 }
 
-.spin {
-  animation: spin 1s linear infinite;
-}
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin 1s linear infinite; }
 
-/* ---- Progress bar ---- */
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
 
 .progress-bar {
   margin-top: 24px;
@@ -116,13 +114,14 @@
 .progress-text {
   font-size: 0.78rem;
   color: var(--muted);
-  font-weight: 400;
   white-space: nowrap;
   min-width: 80px;
   text-align: right;
 }
 
-/* ---- Toast notifications ---- */
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
 
 .toast-container {
   position: fixed;
@@ -143,7 +142,6 @@
   padding: 14px 18px;
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  font-weight: 400;
   box-shadow: var(--shadow-lg);
   animation: toast-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   max-width: 380px;
@@ -151,20 +149,9 @@
   background: var(--card);
 }
 
-.toast.success {
-  border-color: rgba(76, 195, 138, 0.3);
-  color: var(--success);
-}
-
-.toast.error {
-  border-color: rgba(229, 72, 77, 0.3);
-  color: var(--error);
-}
-
-.toast.info {
-  border-color: rgba(212, 160, 83, 0.3);
-  color: var(--accent);
-}
+.toast.success { border-color: rgba(76, 195, 138, 0.3); color: var(--success); }
+.toast.error { border-color: rgba(229, 72, 77, 0.3); color: var(--error); }
+.toast.info { border-color: rgba(212, 160, 83, 0.3); color: var(--accent); }
 
 .toast-close {
   margin-left: auto;
@@ -180,22 +167,20 @@
   justify-content: center;
   flex-shrink: 0;
 }
-
-.toast-close:hover {
-  opacity: 1;
-}
+.toast-close:hover { opacity: 1; }
 
 @keyframes toast-in {
   from { opacity: 0; transform: translateX(100%) scale(0.95); }
   to { opacity: 1; transform: translateX(0) scale(1); }
 }
-
 @keyframes toast-out {
   from { opacity: 1; transform: translateX(0) scale(1); }
   to { opacity: 0; transform: translateX(100%) scale(0.95); }
 }
 
-/* ---- Floating Action Button ---- */
+/* ============================================
+   FLOATING ACTION BUTTON
+   ============================================ */
 
 .fab-container {
   position: fixed;
@@ -220,10 +205,7 @@
   z-index: 2;
   position: relative;
 }
-
-.fab-main:hover {
-  background: var(--card-hover);
-}
+.fab-main:hover { background: var(--card-hover); }
 
 .fab-menu {
   position: absolute;
@@ -237,7 +219,6 @@
   pointer-events: none;
   transition: opacity var(--transition), transform var(--transition);
 }
-
 .fab-container.open .fab-menu {
   opacity: 1;
   transform: translateY(0);
@@ -255,32 +236,16 @@
   color: var(--ink);
   font: inherit;
   font-size: 0.85rem;
-  font-weight: 400;
   cursor: pointer;
   white-space: nowrap;
   box-shadow: var(--shadow);
   transition: background var(--transition);
 }
-
-.fab-item:hover {
-  background: var(--card-hover);
-}
-
-.fab-item-danger {
-  color: var(--error);
-}
-
-.fab-item-success {
-  color: #16a34a;
-}
-
-.fab-item:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.fab-item:disabled:hover {
-  transform: none;
-}
+.fab-item:hover { background: var(--card-hover); }
+.fab-item-danger { color: var(--error); }
+.fab-item-success { color: #16a34a; }
+.fab-item:disabled { opacity: 0.5; cursor: not-allowed; }
+.fab-item:disabled:hover { transform: none; }
 
 .fab-overlay {
   position: fixed;
@@ -288,7 +253,9 @@
   z-index: 0;
 }
 
-/* ---- Pricing page ---- */
+/* ============================================
+   PRICING PAGE
+   ============================================ */
 
 .pricing-grid {
   display: grid;
@@ -309,16 +276,11 @@
   flex-direction: column;
   gap: 12px;
 }
-
 .pricing-card:hover {
   background: var(--card-hover);
   border-color: var(--ink-secondary);
 }
-
-.pricing-card-popular {
-  border-color: var(--accent);
-}
-
+.pricing-card-popular { border-color: var(--accent); }
 .pricing-card-selected {
   border-color: var(--accent);
   box-shadow: inset 0 0 0 1px var(--accent);
@@ -339,10 +301,7 @@
   gap: 4px;
 }
 
-.pricing-icon {
-  font-size: 2.5rem;
-  line-height: 1;
-}
+.pricing-icon { font-size: 2.5rem; line-height: 1; }
 
 .pricing-card h3 {
   font-size: 1.1rem;
@@ -356,13 +315,11 @@
   align-items: baseline;
   gap: 2px;
 }
-
 .pricing-currency {
   font-size: 1.1rem;
   font-weight: 500;
   color: var(--ink-secondary);
 }
-
 .pricing-value {
   font-size: 1.75rem;
   font-weight: 500;
@@ -391,7 +348,6 @@
   flex-direction: column;
   gap: 8px;
 }
-
 .pricing-features li {
   display: flex;
   align-items: flex-start;
@@ -400,28 +356,21 @@
   color: var(--ink-secondary);
   line-height: 1.4;
 }
-
 .pricing-check {
   flex-shrink: 0;
   margin-top: 2px;
   color: var(--success);
 }
-
 .pricing-not-include {
   padding-top: 8px;
   border-top: 1px solid var(--line);
 }
-
 .pricing-not-include small {
   font-size: 0.78rem;
   color: var(--muted);
 }
 
-/* Extras grid */
-
-.pricing-extras {
-  margin: 28px 0;
-}
+.pricing-extras { margin: 28px 0; }
 
 .extras-grid {
   display: grid;
@@ -440,20 +389,17 @@
   border-radius: var(--radius-sm);
   gap: 12px;
 }
-
 .extra-info h4 {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--ink);
   margin: 0 0 4px;
 }
-
 .extra-info p {
   font-size: 0.82rem;
   color: var(--ink-secondary);
   margin: 0;
 }
-
 .extra-price {
   font-size: 0.92rem;
   font-weight: 500;
@@ -461,30 +407,20 @@
   white-space: nowrap;
 }
 
-/* CTA section */
-
 .pricing-cta {
   text-align: center;
   padding: 40px 24px;
   margin: 28px 0;
 }
-
-.pricing-cta h2 {
-  margin-bottom: 8px;
-}
-
+.pricing-cta h2 { margin-bottom: 8px; }
 .pricing-cta p {
   color: var(--ink-secondary);
   margin-bottom: 20px;
 }
-
 .pricing-cta-btn {
   display: inline-flex;
   text-decoration: none;
 }
-
-/* Disclaimer */
-
 .pricing-disclaimer {
   text-align: center;
   font-size: 0.82rem;
@@ -492,7 +428,9 @@
   margin: 20px 0 40px;
 }
 
-/* Header actions */
+/* ============================================
+   HEADER ACTIONS & NAV
+   ============================================ */
 
 .header-actions {
   display: flex;
@@ -508,27 +446,20 @@
   border-radius: var(--radius-xs);
   transition: color var(--transition), background var(--transition);
 }
-
 .nav-link:hover {
   background: var(--card-border);
   color: var(--ink);
 }
-
-[data-theme="light"] .nav-link {
-  color: var(--ink-secondary);
-}
-
 [data-theme="light"] .nav-link:hover {
   background: var(--line);
   color: var(--ink);
 }
 
-/* ---- Stepper — Fixed bottom bar (desktop) / Top progress + bottom menu (mobile) ---- */
+/* ============================================
+   STEPPER — Fixed bottom bar (desktop) / Top progress + bottom menu (mobile)
+   ============================================ */
 
-/* Mobile progress bar — shown at the top on mobile only */
-.stepper-progress-mobile {
-  display: none; /* hidden by default, shown on mobile via responsive */
-}
+.stepper-progress-mobile { display: none; }
 
 .stepper {
   position: fixed;
@@ -542,10 +473,7 @@
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Mobile menu button — bottom left, hidden on desktop */
-.stepper-mobile-menu {
-  display: none; /* shown on mobile via responsive */
-}
+.stepper-mobile-menu { display: none; }
 
 .mobile-menu-btn {
   width: 44px;
@@ -562,10 +490,7 @@
   transition: background var(--transition);
   position: relative;
 }
-
-.mobile-menu-btn:hover {
-  background: var(--card-hover);
-}
+.mobile-menu-btn:hover { background: var(--card-hover); }
 
 .mobile-menu-dropdown {
   position: absolute;
@@ -583,7 +508,6 @@
   z-index: 60;
   animation: menu-slide-up 0.2s ease;
 }
-
 @keyframes menu-slide-up {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -606,23 +530,10 @@
   width: 100%;
   text-align: left;
 }
-
-.mobile-menu-item:hover {
-  background: var(--card-hover);
-}
-
-.mobile-menu-item.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.mobile-menu-item.disabled:hover {
-  background: transparent;
-}
-
-.mobile-menu-item.danger {
-  color: var(--error);
-}
+.mobile-menu-item:hover { background: var(--card-hover); }
+.mobile-menu-item.disabled { opacity: 0.4; cursor: not-allowed; }
+.mobile-menu-item.disabled:hover { background: transparent; }
+.mobile-menu-item.danger { color: var(--error); }
 
 .step-indicators {
   display: flex;
@@ -634,10 +545,7 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.step-indicators::-webkit-scrollbar {
-  height: 4px;
-}
-
+.step-indicators::-webkit-scrollbar { height: 4px; }
 .step-indicators::-webkit-scrollbar-thumb {
   background: var(--line);
   border-radius: 2px;
@@ -653,10 +561,7 @@
   position: relative;
   padding: 0 12px;
 }
-
-.step-indicator.completed:not(:last-child)::after {
-  background: var(--accent);
-}
+.step-indicator.completed:not(:last-child)::after { background: var(--accent); }
 
 .step-circle {
   width: 28px;
@@ -674,13 +579,7 @@
   position: relative;
   z-index: 1;
 }
-
-.step-indicator.current .step-circle {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--bg);
-}
-
+.step-indicator.current .step-circle,
 .step-indicator.completed .step-circle {
   border-color: var(--accent);
   background: var(--accent);
@@ -696,15 +595,11 @@
   max-width: 100px;
   transition: color var(--transition);
 }
-
 .step-indicator.current .step-label {
   color: var(--ink);
   font-weight: 500;
 }
-
-.step-indicator.completed .step-label {
-  color: var(--ink-secondary);
-}
+.step-indicator.completed .step-label { color: var(--ink-secondary); }
 
 .stepper-progress {
   display: flex;
@@ -712,7 +607,6 @@
   gap: 12px;
   margin-bottom: 10px;
 }
-
 .stepper-progress-track {
   flex: 1;
   height: 6px;
@@ -720,18 +614,15 @@
   border-radius: 3px;
   overflow: hidden;
 }
-
 .stepper-progress-fill {
   height: 100%;
   background: var(--accent);
   border-radius: 3px;
   transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
 .stepper-progress-text {
   font-size: 0.75rem;
   color: var(--muted);
-  font-weight: 400;
   white-space: nowrap;
   min-width: 140px;
   text-align: right;
@@ -744,7 +635,6 @@
   gap: 12px;
   margin-bottom: 10px;
 }
-
 .stepper-actions {
   display: flex;
   justify-content: flex-end;
@@ -754,7 +644,9 @@
   border-top: 1px solid var(--line);
 }
 
-/* ---- Save Status ---- */
+/* ============================================
+   SAVE STATUS
+   ============================================ */
 
 .save-status {
   display: flex;
@@ -769,37 +661,29 @@
   opacity: 0;
   transform: translateY(-4px);
 }
-
 .save-status.saving {
   opacity: 1;
   transform: translateY(0);
   color: var(--muted);
-  background: transparent;
 }
-
 .save-status.saved {
   opacity: 1;
   transform: translateY(0);
   color: var(--success);
-  background: transparent;
 }
 
-/* ---- Brief Preview ---- */
+/* ============================================
+   BRIEF PREVIEW
+   ============================================ */
 
-.brief-preview {
-  padding: 0;
-}
-
+.brief-preview { padding: 0; }
 .brief-preview > h2 {
   font-size: 1.25rem;
   font-weight: 500;
   margin-bottom: 4px;
   color: var(--ink);
 }
-
-.brief-preview > .hint {
-  margin-bottom: 20px;
-}
+.brief-preview > .hint { margin-bottom: 20px; }
 
 .preview-warning {
   display: flex;
@@ -823,10 +707,7 @@
   margin-bottom: 16px;
   transition: border-color var(--transition);
 }
-
-.preview-section.incomplete {
-  border-color: rgba(229, 72, 77, 0.3);
-}
+.preview-section.incomplete { border-color: rgba(229, 72, 77, 0.3); }
 
 .preview-section-header {
   display: flex;
@@ -836,7 +717,6 @@
   padding-bottom: 12px;
   border-bottom: 1px solid var(--line);
 }
-
 .preview-section-header h3 {
   font-size: 0.95rem;
   font-weight: 500;
@@ -844,10 +724,7 @@
   margin: 0;
 }
 
-.preview-fields {
-  display: grid;
-  gap: 10px;
-}
+.preview-fields { display: grid; gap: 10px; }
 
 .preview-field {
   display: grid;
@@ -856,12 +733,10 @@
   align-items: start;
   font-size: 0.88rem;
 }
-
 .preview-field dt {
   font-weight: 500;
   color: var(--ink-secondary);
 }
-
 .preview-field dd {
   margin: 0;
   color: var(--ink);
@@ -879,7 +754,6 @@
   font-size: 0.82rem;
   color: var(--ink);
 }
-
 .preview-empty {
   color: var(--muted);
   font-size: 0.85rem;
@@ -887,7 +761,9 @@
   margin: 0;
 }
 
-/* ---- Modal Overlay ---- */
+/* ============================================
+   MODAL OVERLAY
+   ============================================ */
 
 .modal-overlay {
   position: fixed;
@@ -899,7 +775,6 @@
   padding: 24px;
   animation: modal-fade-in 0.2s ease;
 }
-
 @keyframes modal-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -927,7 +802,6 @@
   padding: 32px;
   animation: modal-slide-in 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
 @keyframes modal-slide-in {
   from {
     opacity: 0;
@@ -957,36 +831,32 @@
   z-index: 2;
   margin-bottom: 8px;
 }
-
 .modal-close:hover {
   background: var(--card-hover);
   color: var(--ink);
 }
 
-/* ---- Confirm content inside modal ---- */
+/* ============================================
+   CONFIRM DIALOG
+   ============================================ */
 
 .confirm-content {
   text-align: center;
   padding: 16px 0;
 }
-
 .confirm-title {
   font-size: 1.125rem;
   font-weight: 500;
   color: var(--ink);
   margin: 0 0 8px;
 }
-
 .confirm-message {
   font-size: 0.875rem;
   color: var(--ink-secondary);
   line-height: 1.5;
-  margin: 0 0 24px;
+  margin: 0 auto 24px;
   max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
 }
-
 .confirm-actions {
   display: flex;
   gap: 8px;

@@ -268,7 +268,7 @@ export function buildTelegramMessage(data: BriefData): string {
 /**
  * Envía el brief a Telegram.
  * - En desarrollo local: llama directamente a la API de Telegram usando las variables VITE_TELEGRAM_*.
- * - En producción: usa la Netlify Function que protege el token del bot.
+ * - En producción: usa la Serverless Function que protege el token del bot.
  */
 export async function sendToTelegram(data: BriefData): Promise<boolean> {
   // En desarrollo, usar API directa de Telegram
@@ -276,7 +276,7 @@ export async function sendToTelegram(data: BriefData): Promise<boolean> {
     return sendToTelegramDirect(data);
   }
 
-  // En producción, usar Netlify Function
+  // En producción, usar Serverless Function
   return sendToTelegramViaFunction(data);
 }
 
@@ -342,7 +342,7 @@ async function sendToTelegramDirect(data: BriefData): Promise<boolean> {
 }
 
 /**
- * Envía a través de la Vercel Serverless Function (producción).
+ * Envía a través de la Serverless Function (producción).
  */
 async function sendToTelegramViaFunction(data: BriefData): Promise<boolean> {
   const url = '/api/send-brief';

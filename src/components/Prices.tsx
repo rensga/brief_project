@@ -117,7 +117,7 @@ const extraServices = [
   { name: 'Dominio + Hosting (1 año)', price: '$50 - $150', description: 'Registro de dominio y alojamiento web' },
 ];
 
-export function Prices() {
+export function Prices({ onBack }: { onBack?: () => void }) {
   const { theme, toggleTheme } = useThemeStore();
 
   return (
@@ -128,9 +128,16 @@ export function Prices() {
             <h1>Precios de Servicios Web</h1>
             <p>Estimados aproximados en dólares (USD). Cada proyecto es único y el precio final se define después del brief.</p>
           </div>
-          <Button variant="ghost" onClick={toggleTheme} aria-label="Cambiar tema" title="Cambiar tema">
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </Button>
+          <div className="header-actions">
+            {onBack && (
+              <button className="btn btn-ghost nav-link" onClick={onBack} title="Volver">
+                <ArrowLeft size={16} />
+              </button>
+            )}
+            <Button variant="ghost" onClick={toggleTheme} aria-label="Cambiar tema" title="Cambiar tema">
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </Button>
+          </div>
         </div>
       </header>
 

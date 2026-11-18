@@ -5,6 +5,7 @@ import { briefSchema } from '../lib/validation';
 import { sendToTelegram } from '../lib/telegram';
 import { downloadFile, textFieldsForProgress, arrayFieldsForProgress } from '../lib/utils';
 import { type ToastType } from '../components/Toast';
+import { useAdminStore } from '../stores/adminStore';
 
 const STORAGE_KEY = 'brief-web-v1';
 const SAVE_DEBOUNCE_MS = 800;
@@ -36,6 +37,7 @@ export function useBriefActions(form: UseFormReturn<BriefData>, addToast: (msg: 
 
   const { watch, setValue, reset, getValues } = form;
   const watched = watch();
+  const addBrief = useAdminStore((s) => s.addBrief);
 
   // Restaurar desde localStorage
   useEffect(() => {
@@ -139,6 +141,9 @@ export function useBriefActions(form: UseFormReturn<BriefData>, addToast: (msg: 
 
     setSending(true);
     try {
+      // Guardar en el admin store para que el panel pueda verlo
+      addBrief(result.data);
+
       const ok = await sendToTelegram(result.data);
 
       if (ok) {

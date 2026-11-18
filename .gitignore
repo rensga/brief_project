@@ -12,8 +12,11 @@ dist
 dist-ssr
 *.local
 
-# Netlify internal files
-.netlify/
+# Environment files (keep example only)
+.env
+.env.local
+.env.production
+.env.development
 
 # Editor directories and files
 .vscode/*

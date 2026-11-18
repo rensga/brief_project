@@ -1,14 +1,17 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Shield } from 'lucide-react';
 
 import { useThemeStore } from './stores/themeStore';
+import { useAdminStore } from './stores/adminStore';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Button } from './components/Button';
 import { ToastContainer, useToast } from './components/Toast';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { Prices } from './components/Prices';
+import { AdminLogin } from './components/AdminLogin';
+import { AdminPanel } from './components/AdminPanel';
 import { Stepper, STEPS } from './components/Stepper';
 import { BriefPreview } from './components/BriefPreview';
 import { ModalOverlay } from './components/ModalOverlay';
@@ -26,7 +29,13 @@ import { ObservationsSection } from './components/sections/ObservationsSection';
 
 const FORM_STEP_COUNT = STEPS.length;
 
-function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
+function BriefForm({ 
+  onNavigateToPrices, 
+  onNavigateToAdmin 
+}: { 
+  onNavigateToPrices: () => void;
+  onNavigateToAdmin: () => void;
+}) {
   const { theme, toggleTheme } = useThemeStore();
   const { toasts, addToast, removeToast } = useToast();
   const [showClearDialog, setShowClearDialog] = useState(false);
@@ -142,6 +151,9 @@ function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
               <button className="btn btn-ghost nav-link" onClick={onNavigateToPrices} title="Ver precios">
                 Precios
               </button>
+              <button className="btn btn-ghost nav-link" onClick={onNavigateToAdmin} title="Admin">
+                <Shield size={16} />
+              </button>
               <Button variant="ghost" onClick={toggleTheme} aria-label="Cambiar tema" title="Cambiar tema">
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
               </Button>
@@ -178,17 +190,52 @@ function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
   );
 }
 
-type Page = 'form' | 'prices';
+type Page = 'form' | 'prices' | 'admin';
 
 export default function App() {
   const [page, setPage] = useState<Page>('form');
+  const isAuthenticated = useAdminStore((s) => s.isAuthenticated);
+  const loadBriefsFromFirebase = useAdminStore((s) => s.loadBriefsFromFirebase);
+
+  // Cargar briefs desde Firebase al iniciar la app
+  useEffect(() => {
+    loadBriefsFromFirebase();
+  }, [loadBriefsFromFirebase]);
+
+  // Si ya está autenticado y navega a admin, recargar briefs
+  useEffect(() => {
+    if (page === 'admin' && isAuthenticated) {
+      loadBriefsFromFirebase();
+    }
+  }, [page, isAuthenticated, loadBriefsFromFirebase]);
+
+  const handleNavigateToAdmin = () => {
+    if (isAuthenticated) {
+      setPage('admin');
+    } else {
+      setPage('admin');
+    }
+  };
+
+  const handleBackFromAdmin = () => {
+    setPage('form');
+  };
 
   return (
     <ThemeProvider>
       {page === 'prices' ? (
-        <Prices />
+        <Prices onBack={() => setPage('form')} />
+      ) : page === 'admin' ? (
+        isAuthenticated ? (
+          <AdminPanel onBack={handleBackFromAdmin} />
+        ) : (
+          <AdminLogin onBack={handleBackFromAdmin} />
+        )
       ) : (
-        <BriefForm onNavigateToPrices={() => setPage('prices')} />
+        <BriefForm 
+          onNavigateToPrices={() => setPage('prices')} 
+          onNavigateToAdmin={handleNavigateToAdmin}
+        />
       )}
     </ThemeProvider>
   );

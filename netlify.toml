@@ -10,6 +10,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  TELEGRAM_BOT_TOKEN = "9276574208:AAEFjumObOr7SRhXpHCEd5lTk4OgCoysdto"
 
 [dev]
   functions = "netlify/functions"

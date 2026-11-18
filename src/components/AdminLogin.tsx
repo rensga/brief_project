@@ -1,4 +1,5 @@
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
 import { useAdminStore } from '../stores/adminStore';
 import { Button } from './Button';

@@ -17,7 +17,6 @@ import {
   DownloadCloud,
   ToggleLeft,
   ToggleRight,
-  Key,
   HardDrive,
   Send,
   Globe,
@@ -235,7 +234,7 @@ function DashboardTab() {
       <div className="admin-dashboard-header">
         <h3>Resumen</h3>
         {briefs.length > 0 && (
-          <Button variant="outline" onClick={exportAllBriefs}>
+          <Button variant="secondary" onClick={exportAllBriefs}>
             <DownloadCloud size={16} />
             Exportar todos
           </Button>
@@ -348,11 +347,11 @@ function BriefsTab() {
           </div>
           {briefs.length > 0 && (
             <>
-              <Button variant="outline" onClick={exportAllBriefs}>
+              <Button variant="secondary" onClick={exportAllBriefs}>
                 <DownloadCloud size={16} />
                 Exportar
               </Button>
-              <Button variant="outline" onClick={() => setShowClearDialog(true)}>
+              <Button variant="secondary" onClick={() => setShowClearDialog(true)}>
                 <Trash2 size={16} />
                 Limpiar todo
               </Button>
@@ -402,10 +401,6 @@ function SettingsTab() {
   const [showClearStorageDialog, setShowClearStorageDialog] = useState(false);
 
   const storageInfo = getStorageInfo();
-  const totalStorage = storageInfo.reduce((acc, item) => {
-    const num = parseFloat(item.size);
-    return acc + (isNaN(num) ? 0 : num);
-  }, 0);
 
   const handleSaveCredentials = () => {
     if (!newUsername.trim()) return;
@@ -580,7 +575,7 @@ function SettingsTab() {
               </div>
               <div className="admin-storage-actions">
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   onClick={() => setShowClearStorageDialog(true)}
                 >
                   <AlertTriangle size={16} />
@@ -639,7 +634,7 @@ export function AdminPanel({ onBack }: { onBack: () => void }) {
             )}
           </div>
         </div>
-        <Button variant="outline" onClick={handleLogout}>
+        <Button variant="secondary" onClick={handleLogout}>
           <LogOut size={16} />
           Cerrar sesión
         </Button>

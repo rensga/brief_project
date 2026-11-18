@@ -57,8 +57,8 @@ interface AdminStore {
 
 // Credenciales por defecto — almacenadas como hashes SHA-256
 // Para cambiarlas, usa changeCredentials() en el panel admin.
-const DEFAULT_USERNAME_HASH = 'e845a4e1b389f091a974ab40e8e3a0b8d0e2b6b0c3f1a2d4e5f6a7b8c9d0e1f2';
-const DEFAULT_PASSWORD_HASH = 'f956b5f2c49a0102b085bc51f9f4b1c9e1f3c7c1d4a2b3e5f6a7b8c9d0e1f2a3';
+const DEFAULT_USERNAME_HASH = '2483a2b465d313bcc7699df558bd93ed0adc355e5e6ecc65f3ff36f735d0d921';
+const DEFAULT_PASSWORD_HASH = 'f6751e9d11ff00c475ba4b7001346d245e787547675bdf7a29a531d1e38b3f91';
 
 const DEFAULT_SETTINGS: AdminSettings = {
   pagePrices: true,

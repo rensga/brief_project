@@ -131,12 +131,7 @@ export function useBriefActions(form: UseFormReturn<BriefData>, addToast: (msg: 
     const data = getValues();
     const result = await briefSchema.safeParseAsync(data);
     if (!result.success) {
-      // Debug: mostrar qué campos fallan
-      const issues = result.error.issues;
-      const errors = issues.map((e: any) => `${e.path.join('.')}: ${e.message}`).join('; ');
-      console.error('Validación fallida:', errors);
-      console.error('Datos del formulario:', JSON.stringify(data, null, 2));
-      addToast(`Faltan campos: ${errors}`, 'error');
+      addToast('Completa los campos obligatorios antes de enviar.', 'error');
       // Scroll al primer campo con error
       setTimeout(() => scrollToFirstError(), 100);
       return;

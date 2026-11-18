@@ -42,7 +42,7 @@ interface AdminStore {
   // Settings
   getSettings: () => AdminSettings;
   updateSettings: (settings: Partial<AdminSettings>) => void;
-  changeCredentials: (username: string, password: string) => void;
+  changeCredentials: (username: string, password: string) => Promise<void>;
   togglePage: (page: 'pagePrices' | 'pageForm' | 'pageAdmin') => void;
   toggleTelegram: () => void;
   // Export

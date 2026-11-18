@@ -402,11 +402,11 @@ function SettingsTab() {
 
   const storageInfo = getStorageInfo();
 
-  const handleSaveCredentials = () => {
+  const handleSaveCredentials = async () => {
     if (!newUsername.trim()) return;
     if (newPassword !== confirmPassword) return;
     if (newPassword.length < 4) return;
-    changeCredentials(newUsername.trim(), newPassword);
+    await changeCredentials(newUsername.trim(), newPassword);
     setCredentialsSaved(true);
     setTimeout(() => setCredentialsSaved(false), 2000);
     setNewPassword('');
@@ -501,7 +501,7 @@ function SettingsTab() {
                 className="admin-input"
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
-                placeholder={`Usuario actual: ${settings.adminUsername}`}
+                placeholder="Dejar sin cambiar para mantener el actual"
               />
             </div>
             <div className="admin-field">

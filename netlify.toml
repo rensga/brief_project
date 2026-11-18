@@ -1,6 +1,6 @@
 [build]
   publish = "dist"
-  command = "npm ci && npm run build"
+  command = "pnpm install --frozen-lockfile && pnpm build"
   functions = "netlify/functions"
 
 [[redirects]]

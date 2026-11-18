@@ -18,6 +18,7 @@ export function downloadFile(content: string, filename: string, mimeType: string
 export const textFieldsForProgress = [
   'nombre', 'empresa', 'email', 'telefono', 'rubro',
   'tipo_sitio', 'objetivo', 'publico', 'referencias', 'fecha_entrega', 'presupuesto',
+  'color_principal', 'color_secundario', 'color_acento',
   'colores_no', 'modo', 'contenido_proveedor', 'idiomas', 'sistema', 'admin',
   'db_necesita', 'db_que', 'db_quien', 'db_volumen', 'db_sensible',
   'dominio', 'observaciones', 'fecha_firma', 'firma',

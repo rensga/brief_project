@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Check, Send, Lock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Eye, Send } from 'lucide-react';
 import { Button } from './Button';
 import { ModalOverlay } from './ModalOverlay';
 
@@ -146,10 +146,9 @@ export function Stepper({
               variant="primary"
               onClick={handleSend}
               loading={sending}
-              disabled={progress < 100}
-              icon={progress < 100 ? <Lock size={16} /> : <Send size={16} />}
+              icon={<Eye size={16} />}
             >
-              {sending ? 'Enviando...' : progress < 100 ? `Enviar brief (${progress}%)` : 'Enviar brief'}
+              {sending ? 'Enviando...' : 'Enviar brief'}
             </Button>
           ) : (
             <Button
@@ -158,7 +157,7 @@ export function Stepper({
               className={hasErrors ? 'has-errors' : ''}
               icon={<ChevronRight size={16} />}
             >
-              Siguiente
+              {isLastFormStep ? 'Ver vista previa' : 'Siguiente'}
             </Button>
           )}
         </div>

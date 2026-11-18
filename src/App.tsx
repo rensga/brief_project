@@ -13,6 +13,7 @@ import { Prices } from './components/Prices';
 import { Stepper, STEPS } from './components/Stepper';
 import { BriefPreview } from './components/BriefPreview';
 import { ModalOverlay } from './components/ModalOverlay';
+import { SaveStatus } from './components/SaveStatus';
 import { briefSchema, type BriefData } from './lib/validation';
 import { useBriefActions } from './hooks/useBriefActions';
 
@@ -51,7 +52,7 @@ function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
   });
 
   const { register, formState: { errors }, getValues } = form;
-  const { sending, progress, onClear, onExport, onPrint, onSend } = useBriefActions(form, addToast);
+  const { sending, progress, saveState, onClear, onExport, onPrint, onSend } = useBriefActions(form, addToast);
 
   const handleClear = () => {
     setShowClearDialog(false);
@@ -162,6 +163,8 @@ function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
           progress={progress}
         />
 
+        {/* Save status indicator */}
+        <SaveStatus state={saveState} />
 
         <form id="brief" noValidate className="brief-form">
           {sectionMap(currentStep, register, errors)}

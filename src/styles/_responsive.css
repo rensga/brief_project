@@ -6,7 +6,65 @@
 
 @media (max-width: 480px) {
   .app {
-    padding: 16px 12px 110px;
+    padding: 16px 12px 80px;
+  }
+
+  /* Show mobile progress bar at the top */
+  .stepper-progress-mobile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+
+  .stepper-progress-mobile .stepper-progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .stepper-progress-mobile .stepper-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .stepper-progress-mobile .stepper-progress-text {
+    font-size: 0.7rem;
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: auto;
+  }
+
+  /* Stepper mobile — hide desktop elements, show menu */
+  .stepper {
+    padding: 8px 12px 12px;
+  }
+
+  /* Hide desktop action buttons on mobile */
+  .stepper-actions {
+    display: none !important;
+  }
+
+  /* Hide desktop progress bar on mobile */
+  .stepper-progress {
+    display: none !important;
+  }
+
+  /* Show mobile menu button — fixed to viewport bottom left */
+  .stepper-mobile-menu {
+    display: block;
+    position: fixed;
+    bottom: 20px;
+    left: 16px;
+    z-index: 70;
   }
 
   header.top {
@@ -132,10 +190,10 @@
     padding: 12px 16px;
   }
 
-  /* Stepper mobile */
   .step-indicators {
     gap: 0;
-    padding-bottom: 12px;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
   }
 
   .step-indicator {
@@ -159,19 +217,21 @@
     width: calc(100% - 24px);
   }
 
-  .stepper-progress-text {
-    font-size: 0.65rem;
-    min-width: 100px;
-  }
-
-  .stepper-actions {
-    flex-direction: column;
+  .stepper-nav {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
     gap: 8px;
+    margin-bottom: 8px;
   }
 
-  .stepper-actions .btn {
-    width: 100%;
+  .stepper-nav .btn {
+    width: auto;
+    flex: 0 1 auto;
     justify-content: center;
+  }
+
+  .stepper-nav .btn-ghost {
+    flex-shrink: 0;
   }
 
   /* Preview mobile */
@@ -198,7 +258,7 @@
 
 @media (min-width: 481px) and (max-width: 768px) {
   .app {
-    padding: 20px 16px 110px;
+    padding: 20px 16px 120px;
   }
 
   header.top {
@@ -250,7 +310,7 @@
 @media (min-width: 769px) and (max-width: 1024px) {
   .app {
     max-width: 720px;
-    padding: 28px 20px 110px;
+    padding: 28px 20px 140px;
   }
 
   header.top {

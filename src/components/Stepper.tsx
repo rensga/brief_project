@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Check, Eye, Send } from 'lucide-react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Check, Send, Lock, Download, Printer, Trash2, MoreVertical } from 'lucide-react';
 import { Button } from './Button';
 import { ModalOverlay } from './ModalOverlay';
 
@@ -37,6 +37,9 @@ interface StepperProps {
   onNext: () => void;
   onGoToPreview: () => void;
   onSend: () => void;
+  onClear: () => void;
+  onExport: () => void;
+  onPrint: () => void;
   sending: boolean;
   progress: number;
   hasErrors?: boolean;
@@ -49,11 +52,16 @@ export function Stepper({
   onNext,
   onGoToPreview,
   onSend,
+  onClear,
+  onExport,
+  onPrint,
   sending,
   progress,
   hasErrors,
 }: StepperProps) {
   const [showConfirm, setShowConfirm] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const isLastFormStep = currentStep === totalSteps - 1;
 
@@ -74,6 +82,18 @@ export function Stepper({
     onSend();
   }, [onSend]);
 
+  // Cerrar menú al hacer clic fuera
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [menuOpen]);
+
   return (
     <>
       <ModalOverlay open={showConfirm} onClose={() => setShowConfirm(false)}>
@@ -92,6 +112,16 @@ export function Stepper({
           </div>
         </div>
       </ModalOverlay>
+
+      {/* Progress bar — visible on mobile at the top */}
+      <div className="stepper-progress-mobile">
+        <div className="stepper-progress-track">
+          <div className="stepper-progress-fill" style={{ width: `${progress}%` }} />
+        </div>
+        <span className="stepper-progress-text">
+          {progress}% completado · Paso {currentStep + 1} de {totalSteps}
+        </span>
+      </div>
 
       <div className="stepper">
         {/* Step indicators */}
@@ -120,7 +150,7 @@ export function Stepper({
           })}
         </div>
 
-        {/* Progress bar */}
+        {/* Progress bar — visible on desktop */}
         <div className="stepper-progress" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
           <div className="stepper-progress-track">
             <div className="stepper-progress-fill" style={{ width: `${progress}%` }} />
@@ -131,7 +161,7 @@ export function Stepper({
         </div>
 
         {/* Navigation buttons */}
-        <div className="stepper-actions">
+        <div className="stepper-nav">
           <Button
             variant="ghost"
             onClick={onPrev}
@@ -146,9 +176,10 @@ export function Stepper({
               variant="primary"
               onClick={handleSend}
               loading={sending}
-              icon={<Eye size={16} />}
+              disabled={progress < 100}
+              icon={progress < 100 ? <Lock size={16} /> : <Send size={16} />}
             >
-              {sending ? 'Enviando...' : 'Enviar brief'}
+              {sending ? 'Enviando...' : progress < 100 ? `Enviar brief (${progress}%)` : 'Enviar brief'}
             </Button>
           ) : (
             <Button
@@ -157,10 +188,82 @@ export function Stepper({
               className={hasErrors ? 'has-errors' : ''}
               icon={<ChevronRight size={16} />}
             >
-              {isLastFormStep ? 'Ver vista previa' : 'Siguiente'}
+              Siguiente
             </Button>
           )}
         </div>
+
+        {/* Action buttons — desktop only */}
+        <div className="stepper-actions">
+          <Button
+            variant="ghost"
+            onClick={onPrint}
+            disabled={progress < 100}
+            icon={progress < 100 ? <Lock size={14} /> : <Printer size={14} />}
+          >
+            Imprimir
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={onExport}
+            disabled={progress < 100}
+            icon={progress < 100 ? <Lock size={14} /> : <Download size={14} />}
+          >
+            Exportar
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={onClear}
+            icon={<Trash2 size={14} />}
+          >
+            Limpiar
+          </Button>
+        </div>
+
+      </div>
+
+      {/* Mobile menu button — fixed bottom left */}
+      <div className="stepper-mobile-menu" ref={menuRef}>
+        <button
+          className="btn btn-ghost mobile-menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Opciones"
+          aria-expanded={menuOpen}
+        >
+          <MoreVertical size={20} />
+        </button>
+        {menuOpen && (
+          <div className="mobile-menu-dropdown">
+            <button
+              className={`mobile-menu-item ${progress < 100 ? 'disabled' : ''}`}
+              onClick={() => { setMenuOpen(false); handleSend(); }}
+              disabled={progress < 100}
+            >
+              <Send size={16} />
+              {progress < 100 ? `Enviar (${progress}%)` : 'Enviar brief'}
+            </button>
+            <button
+              className={`mobile-menu-item ${progress < 100 ? 'disabled' : ''}`}
+              onClick={() => { setMenuOpen(false); onExport(); }}
+              disabled={progress < 100}
+            >
+              <Download size={16} />
+              Descargar JSON
+            </button>
+            <button
+              className={`mobile-menu-item ${progress < 100 ? 'disabled' : ''}`}
+              onClick={() => { setMenuOpen(false); onPrint(); }}
+              disabled={progress < 100}
+            >
+              <Printer size={16} />
+              Imprimir
+            </button>
+            <button className="mobile-menu-item danger" onClick={() => { setMenuOpen(false); onClear(); }}>
+              <Trash2 size={16} />
+              Borrar
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

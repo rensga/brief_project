@@ -1,4 +1,4 @@
-import { Handler, HandlerEvent } from '@netlify/functions';
+import { VercelRequest, VercelResponse } from '@vercel/node';
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
@@ -208,36 +208,27 @@ function generateMarkdownPrompt(data: any): string {
   return lines.join('\n');
 }
 
-export const handler: Handler = async (event: HandlerEvent) => {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Solo permitir POST
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Método no permitido' }),
-    };
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Método no permitido' });
+    return;
   }
 
   // Validar que los tokens estén configurados
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.error('TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no configurados');
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Configuración del servidor incompleta' }),
-    };
+    res.status(500).json({ error: 'Configuración del servidor incompleta' });
+    return;
   }
 
   try {
-    const body = JSON.parse(event.body || '{}');
+    const body = req.body;
     const data = body.data;
 
     if (!data) {
-      return {
-        statusCode: 400,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'Faltan datos del brief' }),
-      };
+      res.status(400).json({ error: 'Faltan datos del brief' });
+      return;
     }
 
     // 1. Enviar el mensaje de resumen a Telegram
@@ -257,11 +248,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
     if (!messageResponse.ok) {
       const errorData = await messageResponse.json().catch(() => null);
       console.error('Error al enviar mensaje a Telegram:', errorData?.description || messageResponse.statusText);
-      return {
-        statusCode: 500,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'Error al enviar mensaje a Telegram' }),
-      };
+      res.status(500).json({ error: 'Error al enviar mensaje a Telegram' });
+      return;
     }
 
     // 2. Enviar el documento .md a Telegram
@@ -287,17 +275,9 @@ export const handler: Handler = async (event: HandlerEvent) => {
       // No fallar completamente si el mensaje ya se envió
     }
 
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: true, message: 'Brief enviado correctamente' }),
-    };
+    res.status(200).json({ success: true, message: 'Brief enviado correctamente' });
   } catch (error: any) {
     console.error('Error en send-brief function:', error);
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Error interno del servidor' }),
-    };
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
-};
+}

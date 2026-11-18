@@ -523,18 +523,113 @@
   color: var(--ink);
 }
 
-/* ---- Stepper ---- */
+/* ---- Stepper — Fixed bottom bar (desktop) / Top progress + bottom menu (mobile) ---- */
+
+/* Mobile progress bar — shown at the top on mobile only */
+.stepper-progress-mobile {
+  display: none; /* hidden by default, shown on mobile via responsive */
+}
 
 .stepper {
-  margin-bottom: 24px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 10px 24px 14px;
+  z-index: 50;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile menu button — bottom left, hidden on desktop */
+.stepper-mobile-menu {
+  display: none; /* shown on mobile via responsive */
+}
+
+.mobile-menu-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: background var(--transition);
+  position: relative;
+}
+
+.mobile-menu-btn:hover {
+  background: var(--card-hover);
+}
+
+.mobile-menu-dropdown {
+  position: absolute;
+  bottom: 52px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: 6px;
+  min-width: 180px;
+  z-index: 60;
+  animation: menu-slide-up 0.2s ease;
+}
+
+@keyframes menu-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition);
+  width: 100%;
+  text-align: left;
+}
+
+.mobile-menu-item:hover {
+  background: var(--card-hover);
+}
+
+.mobile-menu-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mobile-menu-item.disabled:hover {
+  background: transparent;
+}
+
+.mobile-menu-item.danger {
+  color: var(--error);
 }
 
 .step-indicators {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
   padding-right: 4px;
   -webkit-overflow-scrolling: touch;
 }
@@ -552,7 +647,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
   cursor: default;
   position: relative;
@@ -615,7 +710,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .stepper-progress-track {
@@ -642,11 +737,20 @@
   text-align: right;
 }
 
-.stepper-actions {
+.stepper-nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
-  padding-top: 12px;
+  margin-bottom: 10px;
+}
+
+.stepper-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
   border-top: 1px solid var(--line);
 }
 

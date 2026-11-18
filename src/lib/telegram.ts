@@ -342,10 +342,10 @@ async function sendToTelegramDirect(data: BriefData): Promise<boolean> {
 }
 
 /**
- * Envía a través de la Netlify Function (producción).
+ * Envía a través de la Vercel Serverless Function (producción).
  */
 async function sendToTelegramViaFunction(data: BriefData): Promise<boolean> {
-  const url = '/.netlify/functions/send-brief';
+  const url = '/api/send-brief';
 
   try {
     const response = await fetch(url, {

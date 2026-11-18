@@ -37,6 +37,7 @@ function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
 
   const form = useForm<BriefData>({
     resolver: zodResolver(briefSchema),
+    shouldUnregister: false,
     defaultValues: {
       marca: [],
       estilo: [],

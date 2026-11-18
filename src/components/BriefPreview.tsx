@@ -170,7 +170,7 @@ export function BriefPreview({ data, onEditStep }: BriefPreviewProps) {
                     <div key={field.label} className="preview-field">
                       <dt>{field.label}</dt>
                       <dd>
-                        {field.label.startsWith('Color') && field.value.startsWith('#') ? (
+                        {field.label.startsWith('Color') && formatValue(field.value).startsWith('#') ? (
                           <span className="color-swatch" style={{ backgroundColor: field.value as string }}>
                             {field.value}
                           </span>

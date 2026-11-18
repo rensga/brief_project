@@ -26,7 +26,7 @@ import { DatabaseSection } from './components/sections/DatabaseSection';
 import { TechnicalSection } from './components/sections/TechnicalSection';
 import { ObservationsSection } from './components/sections/ObservationsSection';
 
-const FORM_STEP_COUNT = STEPS.filter((s) => s.id !== 'preview').length;
+const FORM_STEP_COUNT = STEPS.length;
 
 function BriefForm({ onNavigateToPrices }: { onNavigateToPrices: () => void }) {
   const { theme, toggleTheme } = useThemeStore();

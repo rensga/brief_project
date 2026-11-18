@@ -523,18 +523,26 @@
   color: var(--ink);
 }
 
-/* ---- Stepper ---- */
+/* ---- Stepper — Fixed bottom bar on desktop ---- */
 
 .stepper {
-  margin-bottom: 24px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 12px 24px 16px;
+  z-index: 50;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .step-indicators {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
   padding-right: 4px;
   -webkit-overflow-scrolling: touch;
 }
@@ -552,7 +560,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
   cursor: default;
   position: relative;
@@ -615,7 +623,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .stepper-progress-track {
@@ -645,9 +653,8 @@
 .stepper-actions {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
 }
 
 /* ---- Save Status ---- */
